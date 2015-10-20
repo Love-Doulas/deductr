@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "twitter-vine/version"
+require "deductr/version"
 
 Gem::Specification.new do |s|
   s.name        = "deductr"
