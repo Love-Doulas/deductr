@@ -1,3 +1,5 @@
+require 'httparty'
+
 module Deductr
   class Client
     include HTTParty
@@ -7,12 +9,12 @@ module Deductr
     @refresh_token = nil
     @affiliate_id = nil
 
-    def initialize(platform_num: , affiliate_id: , public_key: , secret_key:, base_uri: "https://app.deductr.com/")
+    def initialize(affiliate_id: , public_key: , secret_key:, base_uri: "https://app.deductr.com/")
       @affiliate_id = affiliate_id
       self.class.base_uri base_uri 
       data = { grant_type: "client_credentials", 
                     scope: "account_write", 
-                client_id: public_key }
+                  client_id: public_key }
       result = self.class.post("/api/oauth/token", 
                                     basic_auth: {username: public_key, password: secret_key},
                                     body: data)
@@ -53,7 +55,14 @@ module Deductr
       end
 
       def _normalize(response)
-        response.parsed_response
+        case response.parsed_response
+        when Hash
+          Hashie::Mash.new response.parsed_response
+        when Array 
+          response.parsed_response.map{|x| Hashie::Mash.new(x) }
+        else 
+          response.parsed_response 
+        end
       end
   end
 end

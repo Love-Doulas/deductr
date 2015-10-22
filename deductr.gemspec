@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
   # Gem dependencies
   #
   s.add_runtime_dependency('httparty')
+  s.add_runtime_dependency('hashie')
 
   # Specs
   s.add_development_dependency('rspec', '>= 2.14.1')
